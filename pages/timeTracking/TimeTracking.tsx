@@ -12,7 +12,8 @@ const BTN_TITLE_STOP = "Stop";
 const BOUNDS_SECONDS = 60;
 
 // Converts seconds into a time string
-function progressFormatterFunction(seconds: number): string {
+function progressFormatterWorklet(seconds: number): string {
+    'worklet';
     const date = new Date(seconds * 1000);
     return date.toISOString().substring(11, 19);
 };
@@ -58,7 +59,7 @@ export function TimeTrackingPage() {
                     duration={1000}
                     radius={120}
                     progressValueFontSize={36}
-                    progressFormatter={progressFormatterFunction}
+                    progressFormatter={progressFormatterWorklet}
                     />
             </View>
 
