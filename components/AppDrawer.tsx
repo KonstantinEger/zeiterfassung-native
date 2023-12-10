@@ -1,6 +1,7 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { TimeTrackingPage } from "../pages/TimeTracking";
 import { TimeOverviewPage } from "../pages/TimeOverview";
+import { OrganizationsPage } from "../pages/orga/Page";
 
 const Drawer = createDrawerNavigator();
 
@@ -10,6 +11,7 @@ export function AppDrawer() {
         <Drawer.Navigator>
             <Drawer.Screen name="Zeiterfassung" component={TimeTrackingPage} />
             <Drawer.Screen name="Zeit Überblick" component={TimeOverviewPage} />
+            <Drawer.Screen name="Organisationen" component={OrganizationsPage} />
         </Drawer.Navigator>
     )
 }
