@@ -22,17 +22,15 @@ export function TimeTrackingPage() {
     const [snackbarVisible, setSnackbarVisible] = useState<boolean>(false);
     const [snackbarContent, setSnackbarContent] = useState<string>("");
 
-    const [initialState, setInitialState] = useState<State>();
-
     const [progress, setProgress] = useState<number>(0);
     const [timerRunning, setTimerRunning] = useState<boolean>(false);
     const [btnTitle, setBtnTitle] = useState<string>(BTN_TITLE_START);
 
+    const [intervalID, setIntervalID] = useState<NodeJS.Timeout>();
+
     // Requests the current state from the server after the first loading
     useEffect(() => {
-        console.log("request state");
         requestState().then((state) => {
-            setInitialState(state);
             setProgress(state.time);
             setTimerRunning(state.event === EVENT_STARTED);
             setBtnTitle(EVENT_STARTED === state.event ? BTN_TITLE_STOP : BTN_TITLE_START);
@@ -42,10 +40,20 @@ export function TimeTrackingPage() {
         });
     }, []);
 
-    // Increments the timer every second
-    let timeoutID: NodeJS.Timeout;
-    if (timerRunning)
-        timeoutID = setTimeout(() => setProgress(progress + 1), 1000);
+    // Manages the interval for incrementing the progress
+    useEffect(() => {
+        if (!timerRunning) {
+            clearInterval(intervalID);
+            return;
+        }
+        let lastUpdateTime = Date.now();
+        setIntervalID(setInterval(() => {
+            let newTime = Date.now();
+            let passedTime = (newTime - lastUpdateTime) / 1000;
+            setProgress(progress => progress + passedTime);
+            lastUpdateTime = newTime;
+        }, 1000));
+    }, [timerRunning]);
 
     return (
         <View style={styles.container}>
@@ -71,7 +79,6 @@ export function TimeTrackingPage() {
                     textColor="black"
                     onPress={(e) => {
                         sendStartStop().then(() => {
-                            clearTimeout(timeoutID);
                             setBtnTitle(timerRunning ? BTN_TITLE_START : BTN_TITLE_STOP);
                             setTimerRunning(!timerRunning);
                         }).catch((err) => {
