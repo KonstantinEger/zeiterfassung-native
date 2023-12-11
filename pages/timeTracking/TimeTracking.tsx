@@ -45,8 +45,14 @@ export function TimeTrackingPage() {
         if (!timerRunning) {
             clearInterval(intervalID);
             return;
-        }        
-        setIntervalID(setInterval(() => setProgress(progress => progress + 1), 1000));
+        }
+        let lastUpdateTime = Date.now();
+        setIntervalID(setInterval(() => {
+            let newTime = Date.now();
+            let passedTime = (newTime - lastUpdateTime) / 1000;
+            setProgress(progress => progress + passedTime);
+            lastUpdateTime = newTime;
+        }, 1000));
     }, [timerRunning]);
 
     return (
