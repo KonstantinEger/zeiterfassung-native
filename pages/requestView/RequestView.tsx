@@ -1,52 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList } from 'react-native';
+import {View, FlatList} from 'react-native';
 import { Card, Button, Text } from 'react-native-paper';
-
-interface Request {
-    id: number;
-    type: 'vacation' | 'scheduleChange';
-    status: 'pending' | 'approved' | 'rejected';
-    details: string;
-}
+import { api, Request as LocalRequest } from './api';
 
 export function RequestViewPage() {
-    const [requests, setRequests] = useState<Request[]>([]);
+    const [requests, setRequests] = useState<LocalRequest[]>([]);
 
     useEffect(() => {
-        // Hier sollte die Logik stehen, um die Anfragen aus Ihrer Datenquelle zu laden
-        // z.B., von einem API-Endpunkt
-        const mockRequests: Request[] = [
-            { id: 1, type: 'vacation', status: 'pending', details: 'Urlaubsantrag für Juni' },
-            { id: 2, type: 'scheduleChange', status: 'pending', details: 'Arbeitszeitänderung für nächste Woche' },
-        ];
-
-        setRequests(mockRequests);
+        api.getRequests().then((data) => setRequests(data));
     }, []);
 
     const handleApproveReject = (id: number, action: 'approve' | 'reject') => {
-        // Hier sollte die Logik stehen, um den Urlaubsantrag zu genehmigen/ablehnen
-        // z.B., einen API-Aufruf, um den Status in der Datenquelle zu aktualisieren
-        const updatedRequests = requests.map(request =>
-            request.id === id ? { ...request, status: action === 'approve' ? 'approved' : 'rejected' } : request
-        );
-
+        api.updateRequestStatus(id, action).then((updatedRequest) => {
+            if (updatedRequest) {
+                setRequests((prevRequests) =>
+                    prevRequests.map((request) => (request.id === updatedRequest.id ? updatedRequest : request))
+                );
+            }
+        });
     };
 
     return (
-        <View>
+        <View style={styles.container}>
             <FlatList
                 data={requests}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <Card>
+                    <Card style={styles.elementCard}>
                         <Card.Content>
                             <Text>{item.details}</Text>
                             <Text>Status: {item.status}</Text>
                         </Card.Content>
                         {item.type === 'vacation' && item.status === 'pending' && (
                             <Card.Actions>
-                                <Button onPress={() => handleApproveReject(item.id, 'approve')}>Genehmigen</Button>
-                                <Button onPress={() => handleApproveReject(item.id, 'reject')}>Ablehnen</Button>
+                                <Button mode="contained" onPress={() => handleApproveReject(item.id, 'approve')}>
+                                    Genehmigen
+                                </Button>
+                                <Button mode="contained" onPress={() => handleApproveReject(item.id, 'reject')}>
+                                    Ablehnen
+                                </Button>
                             </Card.Actions>
                         )}
                     </Card>
@@ -55,3 +47,13 @@ export function RequestViewPage() {
         </View>
     );
 }
+
+const styles = {
+    container: {
+        flex: 1,
+        padding: 16,
+    },
+    elementCard: {
+        marginBottom: 16,
+    },
+};
