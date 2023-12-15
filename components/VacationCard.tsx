@@ -27,6 +27,9 @@ export enum vacationState {
 }
 
 export function VacationCard(props: VacationProps) {
+    const [menuVisible, setMenuVisible] = React.useState(false);
+    function openMenu(){setMenuVisible(true)}
+    function closeMenu(){setMenuVisible(false)}
     return(
         <Card mode="elevated" >
             <Card.Title
