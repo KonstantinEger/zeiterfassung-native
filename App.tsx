@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { PaperProvider } from 'react-native-paper';
 import { AppDrawer } from './components/AppDrawer';
 import { VacationCard, VacationProps, vacationType, vacationState } from './components/VacationCard';
+import {VacationPlanning} from "./pages/VacationPlanning";
 
 const testData: VacationProps = {
   title: "Sommer Urlaub",
@@ -20,7 +21,7 @@ const testData: VacationProps = {
 export default function App() {
   return (
     <PaperProvider>
-      <VacationCard {...testData}></VacationCard>
+      <VacationPlanning></VacationPlanning>
     </PaperProvider>
   );
 }
