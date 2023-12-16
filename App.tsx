@@ -3,7 +3,7 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { PaperProvider } from 'react-native-paper';
 import { AppDrawer } from './components/AppDrawer';
-import { VacationCard, VacationProps, vacationType, vacationState } from './components/VacationCard';
+import { VacationCard, VacationProps, vacationType, vacationState } from './pages/vacationPlanning/VacationCard';
 
 const testData: VacationProps = {
   title: "Sommer Urlaub",
