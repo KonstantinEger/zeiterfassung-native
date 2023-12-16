@@ -1,15 +1,35 @@
-import {Animated, View} from "react-native";
-import {FAB, List, Text} from "react-native-paper";
-import React, {useState} from "react";
+import {Animated, RefreshControl, View} from "react-native";
+import {Divider, FAB, List, Text} from "react-native-paper";
+import React, {useEffect, useState} from "react";
 import ScrollView = Animated.ScrollView;
 import {VacationCard, VacationProps, vacationState, vacationType} from "./VacationCard";
+import {dimens, styles} from "./Styles";
+import {fetchVacationData} from "./api";
+
+export type VacationStatistics = {
+    availableVacationDays: number;
+    totalVacationDays: number;
+    overhours: number;
+    vacations: VacationProps[];
+}
 
 export  function VacationPlanning(): React.JSX.Element {
 
-    const [text1, setText1] = useState('');
-    const [text2, setText2] = useState('');
-    const [listData, setListData] = useState<VacationProps[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [vacationData, setVacationData] = useState<VacationStatistics>({vacations :[], availableVacationDays: 0, totalVacationDays: 0, overhours: 0})
     const [i, inc] = useState(0)
+
+    useEffect(() => {
+        if (!loading) return;
+
+        fetchVacationData()
+            .then(data => {
+                setLoading(false);
+                setVacationData(data);
+            });
+        //todo handle error
+    });
+
 
     function testData(i :number): VacationProps {
         return {
@@ -25,34 +45,41 @@ export  function VacationPlanning(): React.JSX.Element {
         }
     }
 
-    const addItemToList = () => {
+    const addVacation = () => {
         inc(i+1)
-        setListData([testData(i), ...listData]);
+        //setListData([testData(i), ...listData]);
+        vacationData.vacations = [testData(i), ...vacationData.vacations];
+        //setVacationData(vacationData)
     };
 
     return (
     <View style={{ flex: 1 }}>
-        {/* Top Section */}
-        <View style={{ padding: 16 }}>
-            <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 8 }}>Label 1: {text1}</Text>
-            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Label 2: {text2}</Text>
+        <View style={styles.informationWrapper}>
+            <Text style={{ ...styles.mainText, marginBottom: dimens.px8 }}>
+                Verfügbarer Urlaub: <Text>{vacationData.availableVacationDays} / {vacationData.totalVacationDays}</Text>
+            </Text>
+            <Text style={styles.mainText}>
+                Überstunden: <Text>{vacationData.overhours}</Text>
+            </Text>
+            <Divider style={styles.divider} />
+            <Text style={styles.mainText}>Urlaube</Text>
         </View>
 
-        {/* Middle Section - List View */}
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView style={{ flex: 1}} refreshControl={<RefreshControl refreshing={loading} onRefresh={() => setLoading(true)} />}>
             <List.Section>
-                <List.Subheader>List View</List.Subheader>
-                {listData.map((card) => (
-                    <VacationCard {...card}></VacationCard>
+                {vacationData.vacations.map((card, index) => (
+                    <View key={index} style={styles.cardWrapper}>
+                        {/* Add vertical padding to each VacationCard */}
+                        <VacationCard {...card} />
+                    </View>
                 ))}
             </List.Section>
         </ScrollView>
 
-        {/* Floating Action Button */}
         <FAB
-            style={{ position: 'absolute', margin: 16, right: 16, bottom: 16 }}
+            style={styles.actionButton}
             icon="plus"
-            onPress={addItemToList}
+            onPress={addVacation}
         />
     </View>
     );
