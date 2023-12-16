@@ -2,14 +2,20 @@
  * Temp until the api exists
  */
 import {VacationStatistics} from "./VacationPlanning";
-import {vacationState, vacationType} from "./VacationCard";
+import {VacationData, vacationState, vacationType} from "./VacationCard";
 
+export type VacationQuery = {
+    statistics: VacationStatistics,
+    vacations: VacationData[],
+}
 
-export async function fetchVacationData(): Promise<VacationStatistics> {
-    const response : VacationStatistics = {
-        availableVacationDays: 10,
-        totalVacationDays: 30,
-        overhours: 24,
+export async function fetchVacationData(): Promise<VacationQuery> {
+    const response : VacationQuery = {
+        statistics : {
+            availableVacationDays: 10,
+            totalVacationDays: 30,
+            overhours: 24,
+        },
 
         vacations: [
             {

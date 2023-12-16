@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
       padding: dimens.px16
    },
 
-   mainText: {
+   label: {
       fontSize: dimens.sp16,
       fontWeight: 'bold'
    },

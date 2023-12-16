@@ -1,8 +1,10 @@
 import * as React from "react";
 import { Card, Menu, Text, IconButton, Button, IconButtonProps } from 'react-native-paper';
+import {LinearLayout} from "../../components/LinearLayout";
+import {styles} from "./Styles";
 
 //demo props maybe changed later for api complience
-export type VacationProps = {
+export type VacationData = {
     title: String;
     type: vacationType;
     start: Date;
@@ -14,6 +16,11 @@ export type VacationProps = {
     agent: String;
 }
 
+export type VacationCardProps  = {
+    vacationData: VacationData;
+    onDeleteClicked: () => void;
+}
+
 export enum vacationType {
     vacation = "Urlaub",
     overtime = "Überstunden",
@@ -21,28 +28,28 @@ export enum vacationType {
 }
 
 export enum vacationState {
+    notSubmitted = "Nicht Eingereicht",
     approved = "Genehmigt",
     pending = "Ausstehend",
     declined = "Abgelehnt"
 }
 
-export function VacationCard(props: VacationProps) {
+export function VacationCard(props: VacationCardProps) {
     const [menuVisible, setMenuVisible] = React.useState(false);
     function openMenu() { setMenuVisible(true) }
     function closeMenu() { setMenuVisible(false) }
     
     function editCard(){
-
     }
-    
+
     function deleteCard(){
-
+        props.onDeleteClicked();
     }
-    
+
     return (
         <Card mode="elevated" >
             <Card.Title
-                title={props.title}
+                title={props.vacationData.title}
                 right={(props) => (
                     <Menu
                         visible={menuVisible}
@@ -54,26 +61,53 @@ export function VacationCard(props: VacationProps) {
                 )}
             />
             <Card.Content>
+                <LinearLayout>
+                    <Text variant="bodyMedium" style={styles.label}>Von: </Text>
+                    <Text variant="bodyMedium">{props.vacationData.start.toLocaleString()}</Text>
+                </LinearLayout>
+
+                <LinearLayout>
+                    <Text variant="bodyMedium" style={styles.label}>Bis: </Text>
+                    <Text variant="bodyMedium">{props.vacationData.end.toLocaleString()}</Text>
+                </LinearLayout>
+
+                <LinearLayout>
+                    <Text variant="bodyMedium" style={styles.label}>Typ: </Text>
+                    <Text variant="bodyMedium">{props.vacationData.type}</Text>
+                </LinearLayout>
+
+                <LinearLayout>
+                    <Text variant="bodyMedium" style={styles.label}>Status: </Text>
+                    <Text variant="bodyMedium" style={{ color: getVacationStateColor(props.vacationData.state) }}>{props.vacationData.state}</Text>
+                </LinearLayout>
+
+                <LinearLayout>
+                    <Text variant="bodyMedium" style={styles.label}>Vertreter: </Text>
+                    <Text variant="bodyMedium">{props.vacationData.agent}</Text>
+                </LinearLayout>
+                {/*
+
                 <Text>
                     <Text variant="bodyMedium">Von: </Text>
-                    <Text variant="bodyMedium">{props.start.toLocaleString()}</Text>
+                    <Text variant="bodyMedium">{props.vacationData.start.toLocaleString()}</Text>
                 </Text>
                 <Text>
                     <Text variant="bodyMedium">Bis: </Text>
-                    <Text variant="bodyMedium">{props.end.toLocaleString()}</Text>
+                    <Text variant="bodyMedium">{props.vacationData.end.toLocaleString()}</Text>
                 </Text>
                 <Text>
                     <Text variant="bodyMedium">Typ: </Text>
-                    <Text variant="bodyMedium">{props.type}</Text>
+                    <Text variant="bodyMedium">{props.vacationData.type}</Text>
                 </Text>
                 <Text>
                     <Text variant="bodyMedium">Status: </Text>
-                    <Text variant="bodyMedium" style={{ color: getVacationStateColor(props.state) }}>{props.state}</Text>
+                    <Text variant="bodyMedium" style={{ color: getVacationStateColor(props.vacationData.state) }}>{props.vacationData.state}</Text>
                 </Text>
                 <Text>
                     <Text variant="bodyMedium">Vertreter: </Text>
-                    <Text variant="bodyMedium">{props.agent}</Text>
+                    <Text variant="bodyMedium">{props.vacationData.agent}</Text>
                 </Text>
+                */}
             </Card.Content>
         </Card>
     );
@@ -81,6 +115,8 @@ export function VacationCard(props: VacationProps) {
 
 function getVacationStateColor(state: vacationState) {
     switch (state) {
+        case vacationState.notSubmitted:
+            return "purple";
         case vacationState.approved:
             return "green";
         case vacationState.declined:
