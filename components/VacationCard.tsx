@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Card, Menu, Text, IconButton } from 'react-native-paper';
+import { Card, Menu, Text, IconButton, Button, IconButtonProps } from 'react-native-paper';
 
 //demo props maybe changed later for api complience
 export type VacationProps = {
@@ -28,13 +28,22 @@ export enum vacationState {
 
 export function VacationCard(props: VacationProps) {
     const [menuVisible, setMenuVisible] = React.useState(false);
-    function openMenu(){setMenuVisible(true)}
-    function closeMenu(){setMenuVisible(false)}
-    return(
+    function openMenu() { setMenuVisible(true) }
+    function closeMenu() { setMenuVisible(false) }
+    return (
         <Card mode="elevated" >
             <Card.Title
                 title={props.title}
-                right={(props) => <IconButton {...props} icon="dots-vertical" onPress={getCardMenu} />}
+                right={(props) => (
+                    <Menu
+                        visible={menuVisible}
+                        onDismiss={closeMenu}
+                        anchor={<IconButton {...props} icon="dots-vertical" onPress={openMenu} />}>
+                        <Menu.Item onPress={() => { }} title="test" />
+                        <Menu.Item onPress={() => { }} title="Item 2" />
+                        <Menu.Item onPress={() => { }} title="Item 3" />
+                    </Menu>
+                )}
             />
             <Card.Content>
                 <Text>
@@ -51,7 +60,7 @@ export function VacationCard(props: VacationProps) {
                 </Text>
                 <Text>
                     <Text variant="bodyMedium">Status: </Text>
-                    <Text variant="bodyMedium" style={{color: getVacationStateColor(props.state)}}>{props.state}</Text>
+                    <Text variant="bodyMedium" style={{ color: getVacationStateColor(props.state) }}>{props.state}</Text>
                 </Text>
                 <Text>
                     <Text variant="bodyMedium">Vertreter: </Text>
@@ -62,8 +71,8 @@ export function VacationCard(props: VacationProps) {
     );
 }
 
-function getVacationStateColor(state: vacationState){
-    switch(state){
+function getVacationStateColor(state: vacationState) {
+    switch (state) {
         case vacationState.approved:
             return "green";
         case vacationState.declined:
@@ -73,6 +82,6 @@ function getVacationStateColor(state: vacationState){
     }
 }
 
-function getCardMenu(){
+function getCardMenu() {
 
 }
