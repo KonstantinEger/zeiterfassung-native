@@ -7,7 +7,9 @@ import { AppDrawer } from './components/AppDrawer';
 export default function App() {
   return (
     <PaperProvider>
-      <AppDrawer></AppDrawer>
+      <NavigationContainer>
+        <AppDrawer />
+      </NavigationContainer>
     </PaperProvider>
   );
 }
