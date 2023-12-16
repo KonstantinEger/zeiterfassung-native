@@ -2,7 +2,7 @@ import {Animated, View} from "react-native";
 import {FAB, List, Text} from "react-native-paper";
 import React, {useState} from "react";
 import ScrollView = Animated.ScrollView;
-import {VacationCard, VacationProps, vacationState, vacationType} from "../components/VacationCard";
+import {VacationCard, VacationProps, vacationState, vacationType} from "./VacationCard";
 
 export  function VacationPlanning(): React.JSX.Element {
 
