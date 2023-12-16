@@ -30,6 +30,15 @@ export function VacationCard(props: VacationProps) {
     const [menuVisible, setMenuVisible] = React.useState(false);
     function openMenu() { setMenuVisible(true) }
     function closeMenu() { setMenuVisible(false) }
+    
+    function editCard(){
+
+    }
+    
+    function deleteCard(){
+
+    }
+    
     return (
         <Card mode="elevated" >
             <Card.Title
@@ -39,9 +48,8 @@ export function VacationCard(props: VacationProps) {
                         visible={menuVisible}
                         onDismiss={closeMenu}
                         anchor={<IconButton {...props} icon="dots-vertical" onPress={openMenu} />}>
-                        <Menu.Item onPress={() => { }} title="test" />
-                        <Menu.Item onPress={() => { }} title="Item 2" />
-                        <Menu.Item onPress={() => { }} title="Item 3" />
+                        <Menu.Item onPress={editCard} title="Bearbeiten" leadingIcon="pencil"/>
+                        <Menu.Item onPress={deleteCard} title="Löschen" leadingIcon="delete" />
                     </Menu>
                 )}
             />
@@ -80,8 +88,4 @@ function getVacationStateColor(state: vacationState) {
         case vacationState.pending:
             return "orange";
     }
-}
-
-function getCardMenu() {
-
 }
