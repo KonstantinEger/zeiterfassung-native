@@ -1,5 +1,9 @@
 # Learn more https://docs.github.com/en/get-EVENT_STARTED/getting-EVENT_STARTED-with-git/ignoring-files
 
+# IDEs
+.vscode/
+.idea/
+
 # dependencies
 node_modules/
 
