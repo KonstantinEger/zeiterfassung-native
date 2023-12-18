@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { TimeTrackingPage } from "../pages/timeTracking/TimeTracking";
 import { TimeOverviewPage } from "../pages/TimeOverview";
-import { OrganizationsPage } from "../pages/orga/Page";
+import { OrganizationsPage } from "../pages/orga/Organisation";
 
 const Drawer = createDrawerNavigator();
 
