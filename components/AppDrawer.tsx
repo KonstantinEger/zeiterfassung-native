@@ -3,6 +3,7 @@ import { TimeTrackingPage } from "../pages/timeTracking/TimeTracking";
 import { TimeOverviewPage } from "../pages/TimeOverview";
 import { OrganizationsPage } from "../pages/orga/Organisation";
 import {VacationPlanning} from "../pages/vacationPlanning/VacationPlanning";
+import {RequestViewPage} from "../pages/requestView/RequestView";
 
 const Drawer = createDrawerNavigator();
 
@@ -14,6 +15,7 @@ export function AppDrawer() {
             <Drawer.Screen name="Zeit Überblick" component={TimeOverviewPage} />
             <Drawer.Screen name="Urlaubsplanung" component={VacationPlanning} />
             <Drawer.Screen name="Organisationen" component={OrganizationsPage} />
+            <Drawer.Screen name="Anfragen" component={RequestViewPage} />
         </Drawer.Navigator>
     )
 }
