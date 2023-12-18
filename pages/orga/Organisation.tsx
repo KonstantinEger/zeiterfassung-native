@@ -3,9 +3,15 @@ import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 import { Banner, Button, Dialog, Divider, FAB, HelperText, List, Portal, Text, TextInput } from "react-native-paper";
 import { Breadcrumbs } from "../../components/Breadcrumbs";
 import { OrgaUnit, getChildUnits, getPathFromRootToUnit, useOrgaUnits, findRootOrgaUnit } from "./OrgaState";
+import type { NavigationProp} from "@react-navigation/native";
 
-export function OrganizationsPage() {
+export type OrganisationsPageProps = {
+    navigation: NavigationProp<ReactNavigation.RootParamList>,
+};
+
+export function OrganizationsPage({ navigation }: OrganisationsPageProps) {
     const [currentUnit, setCurrentUnit] = useState<OrgaUnit | null>(null);
+    const [fabVisible, setFabVisible] = useState(true);
     const [fabOpen, setFabOpen] = useState(false);
     const [addChildUnitDialogOpen, setAddChildUnitDialogOpen] = useState(false);
     const orga = useOrgaUnits();
@@ -14,6 +20,21 @@ export function OrganizationsPage() {
         if (currentUnit !== null) { return; }
         setCurrentUnit(findRootOrgaUnit(orga.units));
     }, [orga.units]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("blur", () => {
+            setFabVisible(false);
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            setFabVisible(true);
+        });
+        return unsubscribe;
+    }, [navigation]);
+
 
     return (
         <ScrollView refreshControl={<RefreshControl refreshing={orga.loading} onRefresh={orga.reload} />}>
@@ -35,7 +56,7 @@ export function OrganizationsPage() {
                 {/* Actions for adding users / units */}
                 <FAB.Group
                     open={fabOpen}
-                    visible
+                    visible={fabVisible}
                     icon="plus"
                     actions={[
                         {
