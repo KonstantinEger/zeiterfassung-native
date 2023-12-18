@@ -10,8 +10,6 @@ export function OrganizationsPage() {
     const [addChildUnitDialogOpen, setAddChildUnitDialogOpen] = useState(false);
     const orga = useOrgaUnits();
 
-    console.log(orga);
-
     useEffect(() => {
         if (currentUnit !== null) { return; }
         setCurrentUnit(findRootOrgaUnit(orga.units));
